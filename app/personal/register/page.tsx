@@ -1,10 +1,9 @@
-
-import LandingPage from '@/components/LandinPage/LandingPage'
+import Register from '@/components/Personal/Auth/Register/Register'
 import React from 'react'
 
 const Page = () => {
   return (
- <LandingPage/>
+  <Register/>
   )
 }
 
