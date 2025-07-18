@@ -37,7 +37,7 @@ export function PasswordInput({
         <input
           id={id}
           type={showPassword ? 'text' : 'password'}
-          className={`w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent ${inputClass}`}
+          className={`w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-01 focus:border-transparent ${inputClass}`}
           {...inputProps}
         />
         <button

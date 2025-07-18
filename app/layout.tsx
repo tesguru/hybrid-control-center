@@ -5,8 +5,8 @@ import { Providers } from "@/lib/providers";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
-  variable: "--font-urbanist",
- 
+  
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -21,9 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${urbanist.variable}  antialiased`}>
+    
+      <body className={`${urbanist.className} antialiased`}>
         <Providers>
-        {children}
+          {children}
         </Providers>
       </body>
     </html>

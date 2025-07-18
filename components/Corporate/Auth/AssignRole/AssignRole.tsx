@@ -1,12 +1,10 @@
 "use client"
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { doctor, IvantageLogo } from '@/lib/constants/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { InputField } from '@/components/ui/Forms/InputField';
-import { URLS } from '@/lib/constants/url';
+
 import { Dropdown } from '@/components/ui/Forms/Dropdown';
 import Button from '@/components/ui/Button/Button';
 import { X } from 'lucide-react'; 
@@ -63,7 +61,7 @@ export default function AssignRole() {
     <div className="bg-white h-screen">
       <div className="grid lg:grid-cols-2 h-full">
       
-        <div className="relative hidden lg:block h-full bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="relative hidden lg:block h-full bg-gradient-to-br from-primary-04 to-primary-04">
           <Image 
             src={doctor} 
             alt="Doctor illustration"
@@ -91,7 +89,7 @@ export default function AssignRole() {
 
           
             <form className="space-y-6" onSubmit={handleSubmit}>
-              {entries.map((entry, index) => (
+              {entries.map((entry) => (
                 <div key={entry.id} className="relative space-y-4  pb-6 mb-6">
                   {entries.length > 1 && (
                     <button
@@ -145,7 +143,7 @@ export default function AssignRole() {
               <div className="flex gap-4 justify-center">
                 <Button
                   type="submit"
-                  className="bg-teal-500 hover:bg-teal-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
+                  className="bg-primary-05 hover:bg-primary-05 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
                 >
                   Continue
                 </Button>

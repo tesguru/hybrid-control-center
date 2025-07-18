@@ -5,7 +5,7 @@ import { loginSchema } from '@/lib/schemas/authschema';
 import { useAuth } from '@/lib/hooks/Personal/Auth/Auth';
 
 export default function LoginPage() {
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit } = useForm({
     resolver: zodResolver(loginSchema),
   });
   const { login } = useAuth();

@@ -1,12 +1,13 @@
 "use client"
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { doctor, IvantageLogo } from '@/lib/constants/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { InputField } from '@/components/ui/Forms/InputField';
 import { URLS } from '@/lib/constants/url';
+import Button from '@/components/ui/Button/Button';
+import { PasswordInput } from '@/components/ui/Forms/PasswordInput';
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -15,19 +16,19 @@ export default function Login() {
     rememberMe: false
   });
 
-  const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
 
-  const handleSubmit = (e) => {
+  const router = useRouter();
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value, type, checked } = e.target;
+  setFormData(prev => ({
+    ...prev,
+    [name]: type === 'checkbox' ? checked : value
+  }));
+};
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push("/dashboard")
+    router.push(URLS.DASHBOARD.PERSONAL.DASHBOARD)
  
   };
 
@@ -35,7 +36,7 @@ export default function Login() {
     <div className="bg-white h-screen">
       <div className="grid lg:grid-cols-2 h-full">
      
-        <div className="relative hidden lg:block h-full bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="relative hidden lg:block h-full bg-gradient-to-br from-blue-50 to-primary-04">
           <Image 
             src={doctor} 
             alt="Doctor illustration"
@@ -79,15 +80,16 @@ export default function Login() {
 
            
               <div>
-                         <InputField
+         <PasswordInput
   label="Password"
   id="password"
-  name="Password"
-    placeholder="Enter Password"
+  name="password" // ✅ Corrected
+  placeholder="Enter Password"
   value={formData.password}
   onChange={handleInputChange}
   required
 />
+
               </div>
 
            
@@ -100,30 +102,30 @@ export default function Login() {
 
                     checked={formData.rememberMe}
                     onChange={handleInputChange}
-                    className="w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500"
+                    className="w-4 h-4 text-primary-01 border-gray-300 rounded focus:ring-primary-01"
                   />
                   <label htmlFor="rememberMe" className="ml-2 text-sm text-gray-600">
                     Remember me
                   </label>
                 </div>
-                <a href="/forgot-password" className="text-sm text-teal-500 hover:text-teal-600">
+                <a href="/forgot-password" className="text-sm text-primary-01 hover:text-primary-02">
                   Forgot Password?
                 </a>
               </div>
 
            
-              <button
+              <Button
                 type="submit"
-                className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
+                className="w-full bg-primary-01 hover:bg-primary-02 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
               >
                 Log in
-              </button>
+              </Button>
 
        
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Don't have an account?{' '}
-                  <Link href={URLS.AUTH.PERSONAL.REGISTER} className="text-teal-500 hover:text-teal-600 font-medium">
+                  <Link href={URLS.AUTH.PERSONAL.REGISTER} className="text-primary-01 hover:text-primary-02 font-medium">
                     Register
                   </Link>
                 </p>

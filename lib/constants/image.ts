@@ -6,6 +6,9 @@ import doctor from "../../assets/images/image 17 1.png";
 import apple from "../../assets/images/pngwing 1.png";
 import google from "../../assets/images/pngwing 2.png";
 import cardBackground from "../../assets/images/Card-1.png"
+import sidebarlogo from "../../assets/images/ivantage logo 1 (1).png"
+
+
 
 
 
@@ -18,5 +21,6 @@ IvantageLogo2,
 doctor,
 apple,
 google, 
-cardBackground
+cardBackground,
+sidebarlogo
 }

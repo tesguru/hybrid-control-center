@@ -1,16 +1,17 @@
 "use client"
-import React, { useState } from 'react';
-import { Sidebar } from './Sidebar/Sidebar';
-import { DashboardCard } from '../ui/Custom/DashboardCard';
-import { PromoCard } from '../ui/Custom/PromoCard';
-import Header from './Header/Header';
+import React from 'react';
+import { Sidebar } from '../DashboardLayout/Sidebar/Sidebar';
+import { DashboardCard } from '../../../ui/Custom/DashboardCard';
+import { PromoCard } from '../../../ui/Custom/PromoCard';
+import Header from '../DashboardLayout/Header/Header';
+import { URLS } from '@/lib/constants/url';
 
 const Dashboard = () => {
-  const [activeItem, setActiveItem] = useState('dashboard');
+
 
   return (
     <div className="flex h-screen bg-gray-50 ">
-      <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />
+      <Sidebar activePath={URLS.DASHBOARD.PERSONAL.DASHBOARD}  />
       <div className="flex-1 overflow-auto">
         <Header />
         <div className="p-6  pl-10">

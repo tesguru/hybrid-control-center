@@ -93,7 +93,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           value={selectedDate ? formatDate(selectedDate) : ''}
           placeholder={placeholder}
           readOnly
-          className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 cursor-pointer"
+          className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-05 focus:border-primary-05 cursor-pointer"
         />
         <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
       </div>
@@ -145,7 +145,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
                   h-10 w-10 rounded-lg text-sm font-medium transition-colors
                   ${!day ? 'invisible' : ''}
                   ${isSelectedDate(day) 
-                    ? 'bg-teal-600 text-white' 
+                    ? 'bg-primary-02 text-white' 
                     : 'text-gray-700 hover:bg-gray-100'
                   }
                   ${day ? 'cursor-pointer' : ''}
@@ -160,7 +160,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
           <div className="flex justify-end mt-4">
             <button
               onClick={() => setIsOpen(false)}
-              className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors font-medium"
+              className="px-6 py-2 bg-primary-02 text-white rounded-lg hover:bg-primary-04 transition-colors font-medium"
               type="button"
             >
               Done

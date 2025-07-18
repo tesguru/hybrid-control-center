@@ -1,56 +1,53 @@
 import React, { useState } from 'react';
-import { Filter, Search, ChevronDown, Download, CheckCircle, X } from 'lucide-react';
+import { Filter, Search, ChevronDown, Download, CheckCircle, X, Users } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// Sample data type
-export interface TableData {
-  id: string;
-  batchId: string;
-  uploadedBy: string;
-  dateUploaded: string;
-  transactionCount: number;
-  transactionTotal: string;
-}
-
-export interface Column {
-  key: string;
+// Generic Column
+export interface Column<T> {
+  key: keyof T;
   label: string;
   sortable?: boolean;
-  render?: (value: any, row: TableData) => React.ReactNode;
+  render?: (value: T[keyof T], row: T) => React.ReactNode;
 }
 
-interface ReusableTableProps {
-  data: TableData[];
-  columns: Column[];
+interface ReusableTableProps<T extends { id: string }> {
+  data: T[];
+  columns: Column<T>[];
   showFilter?: boolean;
   showSearch?: boolean;
   showExport?: boolean;
   filterOptions?: string[];
-  onRowAction?: (action: string, row: TableData) => void;
+  onRowAction?: (action: string, row: T) => void;
   className?: string;
+  emptyStateText?: string;
+  emptyStateSubText?: string;
+  emptyStateButtonText?: string;
+  onEmptyStateAction?: () => void;
 }
 
-export const ExportReusableTable: React.FC<ReusableTableProps> = ({
+export const ExportReusableTable = <T extends { id: string }>({
   data,
   columns,
   showFilter = true,
   showSearch = true,
   showExport = true,
   filterOptions = ['Date', 'Status', 'User'],
-  onRowAction,
-  className = ""
-}) => {
+  className = "",
+  emptyStateText = "You do not have any saved beneficiaries",
+  emptyStateSubText,
+  emptyStateButtonText = "Add a Beneficiary",
+  onEmptyStateAction
+}: ReusableTableProps<T>) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilter, setSelectedFilter] = useState('Date');
-  const [sortConfig, setSortConfig] = useState<{key: string, direction: 'asc' | 'desc'} | null>(null);
+  const [sortConfig, setSortConfig] = useState<{key: keyof T, direction: 'asc' | 'desc'} | null>(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportStatus, setExportStatus] = useState<{
     show: boolean;
     type: 'pdf' | 'csv' | null;
     success: boolean;
   }>({ show: false, type: null, success: false });
-
 
   const filteredData = data.filter(row => {
     if (!searchTerm) return true;
@@ -59,13 +56,12 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
     );
   });
 
-
   const sortedData = React.useMemo(() => {
     if (!sortConfig) return filteredData;
     
     return [...filteredData].sort((a, b) => {
-      const aValue = a[sortConfig.key as keyof TableData];
-      const bValue = b[sortConfig.key as keyof TableData];
+      const aValue = a[sortConfig.key];
+      const bValue = b[sortConfig.key];
       
       if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
@@ -73,7 +69,7 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
     });
   }, [filteredData, sortConfig]);
 
-  const handleSort = (key: string) => {
+  const handleSort = (key: keyof T) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -81,49 +77,59 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
     setSortConfig({ key, direction });
   };
 
-  const handleRowAction = (action: string, row: TableData) => {
-    if (onRowAction) {
-      onRowAction(action, row);
+  // Helper function to escape CSV values
+  const escapeCSVValue = (value: string): string => {
+    if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+      return `"${value.replace(/"/g, '""')}"`;
     }
+    return value;
   };
 
   const handleExport = (type: 'pdf' | 'csv') => {
     try {
       if (type === 'csv') {
-        // CSV Export
-        const headers = columns.map(col => col.label);
-        const dataRows = sortedData.map(row => 
-          columns.map(col => row[col.key as keyof TableData])
+        // Create CSV content
+        const headers = columns.map(col => col.label).join(',');
+        const rows = sortedData.map(row => 
+          columns.map(col => {
+            const value = row[col.key];
+            const stringValue = value !== null && value !== undefined ? String(value) : '';
+            return escapeCSVValue(stringValue);
+          }).join(',')
         );
         
-        const csvContent = [
-          headers.join(','),
-          ...dataRows.map(row => 
-            row.map(cell => `"${cell}"`).join(',')
-          )
-        ].join('\n');
+        const csvContent = [headers, ...rows].join('\n');
         
+        // Create and download CSV file
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
         link.setAttribute('href', url);
         link.setAttribute('download', 'table-export.csv');
+        link.style.visibility = 'hidden';
+        
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
+        URL.revokeObjectURL(url);
         setExportStatus({ show: true, type: 'csv', success: true });
       } else {
-       
         const doc = new jsPDF();
         
         doc.text('Table Export', 14, 16);
         
+        const bodyData = sortedData.map(row => 
+          columns.map(col => {
+            const value = row[col.key];
+            return value !== null && value !== undefined ? String(value) : '';
+          })
+        );
+
         autoTable(doc, {
           head: [columns.map(col => col.label)],
-          body: sortedData.map(row => 
-            columns.map(col => row[col.key as keyof TableData])
-          ),
+          body: bodyData,
           startY: 20,
           styles: {
             cellPadding: 4,
@@ -147,6 +153,28 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
       setShowExportModal(false);
     }
   };
+
+  const EmptyState = () => (
+    <div className="text-center py-16">
+      <div className="flex justify-center mb-4">
+        <div className="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center">
+          <Users className="w-10 h-10 text-teal-600" />
+        </div>
+      </div>
+      <p className="text-gray-900 text-lg font-medium mb-2">{emptyStateText}</p>
+      {emptyStateSubText && (
+        <p className="text-gray-500 text-sm mb-6">{emptyStateSubText}</p>
+      )}
+      {onEmptyStateAction && (
+        <button
+          onClick={onEmptyStateAction}
+          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded-md text-sm font-medium transition-colors"
+        >
+          {emptyStateButtonText}
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
@@ -189,89 +217,101 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-gray-100">
-            <tr>
-              {columns.map((column) => (
-                <th
-                  key={column.key}
-                  className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
-                    column.sortable ? 'cursor-pointer hover:bg-gray-200' : ''
-                  }`}
-                  onClick={() => column.sortable && handleSort(column.key)}
-                >
-                  <div className="flex items-center gap-1">
-                    {column.label}
-                    {column.sortable && sortConfig?.key === column.key && (
-                      <span className="text-gray-400">
-                        {sortConfig.direction === 'asc' ? '↑' : '↓'}
-                      </span>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {sortedData.map((row, index) => (
-              <tr key={row.id || index} className="hover:bg-gray-50">
-                {columns.map((column) => (
-                  <td key={column.key} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {column.render 
-                      ? column.render(row[column.key as keyof TableData], row)
-                      : row[column.key as keyof TableData]
-                    }
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      
       {sortedData.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500 text-sm">No data found</p>
-        </div>
-      ) : showExport && (
-        <div className="p-4 border-t border-gray-200 mt-20">
-          <button
-            onClick={() => setShowExportModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-sm"
-          >
-            <Download className="w-4 h-4" />
-            Export Data
-          </button>
-        </div>
+        <EmptyState />
+      ) : (
+        <>
+         <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-100">
+                <tr>
+                  {columns.map((column) => (
+                    <th
+                      key={column.key as string}
+                      className={`px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider ${
+                        column.sortable ? 'cursor-pointer hover:bg-gray-200' : ''
+                      }`}
+                      onClick={() => column.sortable && handleSort(column.key)}
+                    >
+                      <div className="flex items-center gap-1">
+                        {column.label}
+                        {column.sortable && sortConfig?.key === column.key && (
+                          <span className="text-gray-400">
+                            {sortConfig.direction === 'asc' ? '↑' : '↓'}
+                          </span>
+                        )}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {sortedData.map((row, index) => (
+                  <tr key={row.id || index} className="hover:bg-gray-50">
+                  {columns.map((column) => (
+  <td key={column.key as string} className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+    {column.render 
+      ? column.render(row[column.key], row)
+      : String(row[column.key]) 
+    }
+  </td>
+))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          
+          {showExport && (
+            <div className="p-4 border-t border-gray-200 mt-20">
+              <button
+                onClick={() => setShowExportModal(true)}
+                className="flex items-center gap-2 px-4 py-2 bg-primary-01 text-white rounded-md hover:bg-primary-03 focus:outline-none focus:ring-2 focus:ring-primary-02 focus:ring-offset-2 text-sm"
+              >
+                <Download className="w-4 h-4" />
+                Export Data
+              </button>
+            </div>
+          )}
+        </>
       )}
       
       {showExportModal && (
-        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center  z-50">
-          <div className="bg-white border-1 border-gray-400 rounded-lg p-6 w-96">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">Export Data</h3>
-            <p className="text-sm text-gray-500 mb-6">Choose the format you want to export the data in.</p>
+        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md mx-4 shadow-xl">
+            {/* Icon */}
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center">
+                <Download className="w-10 h-10 text-teal-600" />
+              </div>
+            </div>
             
+            {/* Title */}
+            <h2 className="text-xl font-semibold text-gray-900 text-center mb-8">
+              What format do you want to download in?
+            </h2>
+            
+            {/* Format Buttons */}
             <div className="flex gap-4 mb-6">
               <button
                 onClick={() => handleExport('pdf')}
-                className="flex-1 py-2 px-4 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 py-4 px-6 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 PDF
               </button>
               <button
                 onClick={() => handleExport('csv')}
-                className="flex-1 py-2 px-4 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 py-4 px-6 border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
               >
                 CSV
               </button>
             </div>
             
-            <div className="flex justify-end">
+            {/* Cancel Button */}
+            <div className="flex justify-center">
               <button
                 onClick={() => setShowExportModal(false)}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 focus:outline-none"
+                className="px-6 py-2 text-gray-500 hover:text-gray-700 transition-colors focus:outline-none"
               >
                 Cancel
               </button>
@@ -313,10 +353,10 @@ export const ExportReusableTable: React.FC<ReusableTableProps> = ({
               )}
             </div>
             
-            <div className="mt-20 flex justify-e">
+            <div className="mt-6 flex justify-end">
               <button
                 onClick={() => setExportStatus({ show: false, type: null, success: false })}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className="px-4 py-2 bg-primary-01 text-white rounded-md hover:bg-primary-01 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               >
                 OK
               </button>

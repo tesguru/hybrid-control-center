@@ -32,8 +32,8 @@ export const useAuth = () => {
 
   const verifyOtp = useMutation({
     mutationFn: AuthService.verifyOtp,
-    onSuccess: (data) => {
-      setUser(data.email);
+    onSuccess: (data:any) => {
+      setUser(data);
       router.push('/dashboard');
     },
   });

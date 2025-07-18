@@ -54,7 +54,7 @@ export default function LandingPage() {
             <div className="relative">
               <button
                 onClick={() => setShowDropdown(!showDropdown)}
-                className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
+                className="bg-primary-01 hover:bg-primary-02 text-white px-6 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2"
               >
                 <span>Internet Banking</span>
                 <ChevronDown className="w-4 h-4" />
@@ -70,7 +70,7 @@ export default function LandingPage() {
                         onClick={() => setActiveTab('Personal')}
                         className={`flex-1 py-2 px-4 text-sm font-medium rounded-l-lg ${
                           activeTab === 'Personal'
-                            ? 'bg-gray-800 text-white'
+                            ? 'bg-primary-01 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -80,7 +80,7 @@ export default function LandingPage() {
                         onClick={() => setActiveTab('Corporate')}
                         className={`flex-1 py-2 px-4 text-sm font-medium rounded-r-lg ${
                           activeTab === 'Corporate'
-                            ? 'bg-gray-800 text-white'
+                            ? 'bg-primary-01 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -89,7 +89,7 @@ export default function LandingPage() {
                     </div>
 
               
-                    <Button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 mb-3">
+                    <Button className="w-full bg-primary-01 hover:bg-primary-02 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 mb-3">
                       <Link href={loginUrl}>
                         Login
                       </Link>
@@ -98,7 +98,7 @@ export default function LandingPage() {
                  
                     <p className="text-sm text-gray-600 text-center">
                       Don't have an account?{' '}
-                      <Link href={registerUrl} className="text-teal-500 hover:text-teal-600 font-medium">
+                      <Link href={registerUrl} className="text-primary-01 hover:text-primary-02 font-medium">
                         Register
                       </Link>
                     </p>
@@ -124,7 +124,7 @@ export default function LandingPage() {
             
             
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link href={registerUrl} className="bg-teal-500 hover:bg-teal-600 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 text-center">
+              <Link href={registerUrl} className="bg-primary-01 hover:bg-primary-02 text-white px-8 py-3 rounded-lg font-medium transition-colors duration-200 text-center">
                 Get Started
               </Link>
               <button className="border border-gray-300 hover:border-gray-400 text-gray-700 px-8 py-3 rounded-lg font-medium transition-colors duration-200">
@@ -135,9 +135,9 @@ export default function LandingPage() {
 
          
           <div className="relative">
-            <div className="bg-gradient-to-br from-teal-50 to-blue-50 rounded-2xl p-8 lg:p-12">
+            <div className="bg-gradient-to-br from-primary-04 to-blue-50 rounded-2xl p-8 lg:p-12">
               <Image src={Man} alt="Happy customer" />
-              <div className="absolute -top-4 -right-4 w-16 h-16 bg-teal-500 rounded-full opacity-20"></div>
+              <div className="absolute -top-4 -right-4 w-16 h-16 bg-primary-01 rounded-full opacity-20"></div>
               <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-blue-500 rounded-full opacity-20"></div>
             </div>
           </div>

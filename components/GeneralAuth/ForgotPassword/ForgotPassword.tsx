@@ -1,13 +1,12 @@
 "use client"
 import React, { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
 import Image from 'next/image';
 import { doctor, IvantageLogo } from '@/lib/constants/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { InputField } from '@/components/ui/Forms/InputField';
 import Button from '@/components/ui/Button/Button';
-import { PasswordInput } from '@/components/ui/Forms/PasswordInput';
+
 
 export default function ForgotPassword() {
   const [formData, setFormData] = useState({
@@ -16,9 +15,9 @@ export default function ForgotPassword() {
     rememberMe: false
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+
   const router = useRouter();
-  const handleInputChange = (e) => {
+  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -26,7 +25,7 @@ export default function ForgotPassword() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     router.push("/reset-password")
  
@@ -36,7 +35,7 @@ export default function ForgotPassword() {
     <div className="bg-white h-screen">
       <div className="grid lg:grid-cols-2 h-full">
     
-        <div className="relative hidden lg:block h-full bg-gradient-to-br from-blue-50 to-teal-50">
+        <div className="relative hidden lg:block h-full bg-gradient-to-br from-blue-50 to-primary-04">
           <Image 
             src={doctor} 
             alt="Doctor illustration"
@@ -84,7 +83,7 @@ export default function ForgotPassword() {
 
               <Button
                 type="submit"
-                className="w-full bg-teal-500 hover:bg-teal-600 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
+                className="w-full bg-primary-01 hover:bg-primary-02 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200"
               >
                 Send Link
               </Button>
@@ -93,7 +92,7 @@ export default function ForgotPassword() {
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                  
-                  <Link href={"/login"} className="text-teal-500 hover:text-teal-600 font-medium">
+                  <Link href={"/login"} className="text-primary-01 hover:text-primary-02 font-medium">
                     Back to Login
                   </Link>
                 </p>

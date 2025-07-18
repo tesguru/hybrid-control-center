@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from 'react';
-import { Smartphone, Download } from 'lucide-react';
 import Image from 'next/image';
 import { IvantageLogo, Woman } from '@/lib/constants/image';
 import Link from 'next/link';
@@ -17,7 +16,7 @@ export default function Register() {
     agreeToTerms: false,
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -25,7 +24,7 @@ export default function Register() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Registration data:', formData);
   };
@@ -64,18 +63,16 @@ export default function Register() {
                 value={formData.accountNumber}
                 onChange={handleInputChange}
                 required
-                inputClass="px-3 py-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-                placeholder="Enter account number"
-              />
+                inputClass="px-3 py-3 border rounded-lg focus:ring-primay-01 focus:border-primary-01"
+                placeholder="Enter account number" id={''}              />
               <InputField
                 label="Account Name"
                 name="accountName"
                 value={formData.accountName}
                 onChange={handleInputChange}
                 required
-                inputClass="px-3 py-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-                placeholder="Enter account name"
-              />
+                inputClass="px-3 py-3 border rounded-lg focus:ring-primay-01 focus:border-primary-01"
+                placeholder="Enter account name" id={''}              />
             </div>
 
       
@@ -87,9 +84,8 @@ export default function Register() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                inputClass="px-3 py-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-                placeholder="Enter email address"
-              />
+                inputClass="px-3 py-3 border rounded-lg focus:ring-primay-01 focus:border-primary-01"
+                placeholder="Enter email address" id={''}              />
               <InputField
                 label="Mobile Number"
                 type="tel"
@@ -97,14 +93,13 @@ export default function Register() {
                 value={formData.mobileNumber}
                 onChange={handleInputChange}
                 required
-                inputClass="px-3 py-3 border rounded-lg focus:ring-teal-500 focus:border-teal-500"
-                placeholder="Enter mobile number"
-              />
+                inputClass="px-3 py-3 border rounded-lg focus:ring-primay-01 focus:border-primary-01"
+                placeholder="Enter mobile number" id={''}              />
             </div>
 
          
             <div className="space-y-2">
-              <a href="#" className="text-sm text-teal-600 hover:underline">
+              <a href="#" className="text-sm text-primary-02 hover:underline">
                 Click here to view terms and conditions
               </a>
               <label className="flex items-start space-x-2 text-sm text-gray-700">
@@ -113,7 +108,7 @@ export default function Register() {
                   name="agreeToTerms"
                   checked={formData.agreeToTerms}
                   onChange={handleInputChange}
-                  className="mt-1 w-4 h-4 text-teal-500 border-gray-300 rounded"
+                  className="mt-1 w-4 h-4 text-primary-01 border-gray-300 rounded"
                   required
                 />
                 <span>I agree to the terms and conditions</span>
@@ -124,13 +119,13 @@ export default function Register() {
             <Button
               type="submit"
               disabled={!formData.agreeToTerms}
-              className=" text-center bg-teal-500 hover:bg-teal-600 disabled:bg-gray-300 text-white py-3 rounded-lg font-medium transition-colors"
+              className=" text-center bg-primary-01 hover:bg-primary-02 disabled:bg-gray-300 text-white py-3 rounded-lg font-medium transition-colors"
             >
               Register
             </Button>
             <p className="text-center text-sm text-gray-600">
               Already have an account?{' '}
-              <Link href={URLS.AUTH.CORPORATE.LOGIN}  className="text-teal-500 hover:underline">
+              <Link href={URLS.AUTH.CORPORATE.LOGIN}  className="text-primary-01 hover:underline">
                 Log in
               </Link>
             </p>

@@ -27,7 +27,7 @@ interface ReusableTableProps {
   };
 }
 
-export const ReusableTable: React.FC<ReusableTableProps> = ({
+export const ReusableNormalTable: React.FC<ReusableTableProps> = ({
   data,
   columns,
   onRowAction,
@@ -38,12 +38,12 @@ export const ReusableTable: React.FC<ReusableTableProps> = ({
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-200">
             <tr>
               {columns.map((column) => (
                 <th
                   key={column.key}
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-sm font-extrabold text-black "
                 >
                   {column.label}
                 </th>
