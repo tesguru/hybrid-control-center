@@ -36,7 +36,7 @@ const InputDetails = () => {
       <div className="md:space-y-5">
         <div>
           <Dropdown
-            width="xl"
+             width="responsive"
             label="Select Bank"
             id="account-number"
             value={selectedAccount}

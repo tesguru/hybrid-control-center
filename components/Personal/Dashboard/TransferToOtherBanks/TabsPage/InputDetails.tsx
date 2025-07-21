@@ -12,7 +12,7 @@ const InputDetails = () => {
     <div className="space-y-4 w-full">
    <div className=" md:grid-cols-2">
      <Dropdown
-          width="xxl"
+              width="responsive"
           label="Transfer From"
           id="account-number"
           value={selectedAccount}

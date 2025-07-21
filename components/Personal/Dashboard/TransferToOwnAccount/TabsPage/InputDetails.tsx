@@ -13,7 +13,7 @@ const InputDetails = () => {
       <div className="md:space-y-6">
         <div className="">
             <Dropdown
-          width="xl"
+            width="responsive"
           label="Transfer From"
           id="account-number"
           value={selectedAccount}
@@ -36,7 +36,7 @@ const InputDetails = () => {
       <div className="md:space-y-5">
         <div>
           <Dropdown
-            width="xl"
+               width="responsive"
             label="Transfer to"
             id="account-number"
             value={selectedAccount}

@@ -4,9 +4,9 @@ import React from 'react'
 const Header = () => {
   return (
   <div className="bg-white border-b border-gray-200 p-6">
-           <div className="flex items-center justify-between">
+           <div className="flex  items-center justify-between">
              <div>
-               <p className="text-gray-600 mt-1">Welcome back, Tunde</p>
+               <p className="text-gray-600 pl-10 md:pl-0 mt-1">Welcome back, Tunde</p>
              </div>
              <div className="flex items-center space-x-4">
                <div className="relative">

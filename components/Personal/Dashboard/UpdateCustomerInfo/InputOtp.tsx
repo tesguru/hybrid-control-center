@@ -39,9 +39,9 @@ const InputOtp = () => {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="bg-white rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-2">Verify Your Account</h2>
+        {/* <h2 className="text-2xl font-bold text-center mb-2">Verify Your Account</h2> */}
         <p className="text-gray-600 text-center mb-8">
-          Enter the 4-digit code sent to your device
+          Enter transaction Pin
         </p>
         
         <div className="flex justify-center mb-6">
@@ -71,9 +71,9 @@ const InputOtp = () => {
           </Button>
           
           <Button
-            size="md"
+            size="lg"
             onClick={handleCancel}
-            className="w-full py-2 px-2 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            className="w-full py-3 px-2 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200"
           >
             Cancel
           </Button>

@@ -10,7 +10,7 @@ interface DropdownProps extends Omit<DetailedHTMLProps<SelectHTMLAttributes<HTML
   labelClass?: string;
   selectClass?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  width?: 'auto' | 'full' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
+  width?: 'auto' | 'full' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl' | 'responsive';
   variant?: 'default' | 'outline' | 'filled';
   error?: string;
   helperText?: string;
@@ -37,10 +37,10 @@ export function Dropdown({
   const [isFocused, setIsFocused] = useState(false);
 
   const sizeClasses = {
-    sm: 'pl-3 pr-10 py-2 text-sm min-h-[2.25rem]',
-    md: 'pl-4 pr-12 py-3 text-base min-h-[2.75rem]',
-    lg: 'pl-5 pr-14 py-4 text-lg min-h-[3.25rem]',
-    xl: 'pl-6 pr-16 py-5 text-xl min-h-[3.75rem]',
+    sm: 'pl-3 pr-9 py-2 text-sm',
+    md: 'pl-4 pr-10 py-3 text-base',
+    lg: 'pl-5 pr-12 py-4 text-lg',
+    xl: 'pl-6 pr-14 py-5 text-xl',
   };
 
   const widthClasses = {
@@ -52,6 +52,7 @@ export function Dropdown({
     lg: 'w-80',
     xl: 'w-96',
     xxl: 'w-[24rem]',
+    responsive: 'w-full sm:w-64 md:w-80 lg:w-96 xl:w-[28rem]',
   };
 
   const variantClasses = {
@@ -60,51 +61,67 @@ export function Dropdown({
     filled: 'bg-gray-50 border-gray-200 text-gray-900',
   };
 
-  const getSelectClasses = () => `
-    border rounded-lg 
-    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-    transition-all duration-200 ease-in-out
-    appearance-none cursor-pointer
-    ${sizeClasses[size]} 
-    ${widthClasses[width]} 
-    ${variantClasses[variant]}
-    ${error ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}
-    ${isFocused && !error ? 'ring-2 ring-blue-500 border-blue-500' : ''}
-    ${disabled ? 'opacity-60 cursor-not-allowed bg-gray-100' : 'hover:border-gray-400'}
-  `;
+  const getSelectClasses = () =>
+    [
+      'border rounded-lg appearance-none cursor-pointer w-full',
+      'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500',
+      'transition-all duration-200 ease-in-out',
+      sizeClasses[size],
+      variantClasses[variant],
+      error && 'border-red-500 focus:ring-red-500 focus:border-red-500',
+      isFocused && !error && 'ring-2 ring-blue-500 border-blue-500',
+      disabled ? 'opacity-60 cursor-not-allowed bg-gray-100' : 'hover:border-gray-400',
+      selectClass,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  const getIconClasses = () => {
-    const baseIconSize = {
-      sm: 'h-4 w-4 right-3',
-      md: 'h-5 w-5 right-4',
-      lg: 'h-6 w-6 right-5',
-      xl: 'h-7 w-7 right-6',
-    };
-
-    return `
-      absolute top-1/2 -translate-y-1/2 
-      ${baseIconSize[size]}
-      transition-transform duration-200 pointer-events-none
-      flex-shrink-0
-      ${error ? 'text-red-500' : disabled ? 'text-gray-400' : 'text-gray-500'}
-    `;
+  const iconSize = {
+    sm: 'h-4 w-4',
+    md: 'h-5 w-5',
+    lg: 'h-6 w-6',
+    xl: 'h-7 w-7',
   };
 
-  const getLabelClasses = () => `
-    block text-sm font-medium mb-2 ${labelClass}
-    ${error ? 'text-red-700' : disabled ? 'text-gray-500' : 'text-gray-700'}
-  `;
+  const iconPosition = {
+    sm: 'right-2',
+    md: 'right-2.5',
+    lg: 'right-3',
+    xl: 'right-3.5',
+  };
+
+  const getIconClasses = () =>
+    [
+      'absolute top-1/2 -translate-y-1/2',
+      iconPosition[size],
+      iconSize[size],
+      'pointer-events-none',
+      error ? 'text-red-500' : disabled ? 'text-gray-400' : 'text-gray-500',
+    ].join(' ');
+
+  const getLabelClasses = () =>
+    [
+      'block text-sm font-medium mb-2',
+      labelClass,
+      error ? 'text-red-700' : disabled ? 'text-gray-500' : 'text-gray-700',
+    ].join(' ');
+
+  const getContainerClasses = () =>
+    [
+      widthClasses[width],
+      containerClass,
+    ].join(' ');
 
   return (
-    <div className={`relative ${containerClass}`}>
+    <div className={getContainerClasses()}>
       <label htmlFor={id} className={getLabelClasses()}>
         {label}
       </label>
-      
-      <div className="relative inline-block">
+
+      <div className="relative">
         <select
           id={id}
-          className={`${getSelectClasses()} ${selectClass}`}
+          className={getSelectClasses()}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           disabled={disabled}
@@ -121,10 +138,8 @@ export function Dropdown({
             </option>
           ))}
         </select>
-        
-        <div className="absolute inset-y-0 right-0 flex items-center pointer-events-none">
-          <ChevronDown className={getIconClasses()} aria-hidden="true" />
-        </div>
+
+        <ChevronDown className={getIconClasses()} aria-hidden="true" />
       </div>
 
       {error && (

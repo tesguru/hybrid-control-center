@@ -1,5 +1,4 @@
 import { Dropdown } from "@/components/ui/Forms/Dropdown";
-import { InputField } from "@/components/ui/Forms/InputField";
 import React, { useState } from "react";
 
 const InputDetails = () => {
@@ -12,39 +11,53 @@ const InputDetails = () => {
     <div className="md:flex md:gap-30 my-4">
       <div className="md:space-y-6">
         <div className="">
-           <InputField
-           
-              label="Amount"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
+            <Dropdown
+          width="xl"
+          label="Account Debit"
+          id="account-number"
+          value={selectedAccount}
+          onChange={(e) => setSelectedAccount(e.target.value)}
+          options={accountNumber}
+        />
         </div>
           <div>
-            <InputField
-              label="Account Name"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
+             <Dropdown
+          width="xl"
+          label="Account Debit"
+          id="account-number"
+          value={selectedAccount}
+          onChange={(e) => setSelectedAccount(e.target.value)}
+          options={accountNumber}
+        />
         
         </div>
       </div>
       <div className="md:space-y-5">
         <div>
           <Dropdown
-            width="responsive"
-            label="Select Bank"
+            width="xl"
+            label="Network"
             id="account-number"
             value={selectedAccount}
             onChange={(e) => setSelectedAccount(e.target.value)}
             options={accountNumber}
           />
+
+
         </div>
+
+     
+          <div>
+             <Dropdown
+          width="xl"
+          label="Account Debit"
+          id="account-number"
+          value={selectedAccount}
+          onChange={(e) => setSelectedAccount(e.target.value)}
+          options={accountNumber}
+        />
+          </div>
+    
       </div>
     </div>
   );

@@ -34,8 +34,15 @@ export const URLS = {
     BILLPAYMENTAIRTIME:'/personal/bill-payment-airtime',
     BILLPAYMENTUTILITIES:'/personal/bill-payment-utility',
     REQUESTDEBITCARD:'/personal/request-debit-card',
-    REQUESTCARDPIN:'/personal/request-card-pin',
+    RETRIEVECARDPIN:'/personal/retrieve-card-pin',
     CARDCONTROL:'/personal/card-control',
+    SELFSERVICE_VIEWCUSTOMERINFO:'/personal/view-customer-info',
+    SELFSERVICE_UPDATEINFO:'/personal/update-info',
+    SELFSERVICE_CHANGETRANSACTIONPIN:'/personal/change-transaction-pin',
+    SELFSERVICE_SECURITYQUESTION:'/personal/security-question',
+    SELFSERVICE_DOWNLOAD_T_AND_C:'/personal/view-or-download-t-and-c',
+    SELFSERVICE_ACCOUNTOFFICERDETAILS:'/personal/account-officer-details',
+    SELFSERVICE_COMPLAINTFORM:'/personal/complaint-form'
     },
     CORPORATE: {
       LOGIN: '/corporate/login',

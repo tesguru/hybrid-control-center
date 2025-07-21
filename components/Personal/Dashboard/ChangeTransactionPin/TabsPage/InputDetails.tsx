@@ -1,5 +1,6 @@
 import { Dropdown } from "@/components/ui/Forms/Dropdown";
 import { InputField } from "@/components/ui/Forms/InputField";
+import { PasswordInput } from "@/components/ui/Forms/PasswordInput";
 import React, { useState } from "react";
 
 const InputDetails = () => {
@@ -9,34 +10,10 @@ const InputDetails = () => {
   ];
   const [selectedAccount, setSelectedAccount] = useState("");
   return (
-    <div className="md:flex md:gap-30 my-4">
+    <div className="grid md:grid-cols-2 md:gap-30 my-4">
       <div className="md:space-y-6">
         <div className="">
-           <InputField
-           
-              label="Amount"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
-        </div>
-          <div>
-            <InputField
-              label="Account Name"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
-        
-        </div>
-      </div>
-      <div className="md:space-y-5">
-        <div>
-          <Dropdown
+            <Dropdown
             width="responsive"
             label="Select Bank"
             id="account-number"
@@ -44,6 +21,43 @@ const InputDetails = () => {
             onChange={(e) => setSelectedAccount(e.target.value)}
             options={accountNumber}
           />
+        </div>
+          <div>
+             <PasswordInput
+           
+              label="Old Transaction Pin"
+              id="accountNumber"
+              name="amount"
+              placeholder="Enter Amount"
+              value={"Amount"}
+              required
+            />
+           
+        
+        </div>
+      </div>
+      <div className="md:space-y-5">
+        <div>
+          <InputField
+           
+              label="Security Answer"
+              id="accountNumber"
+              name="amount"
+              placeholder="Enter Amount"
+              value={"Amount"}
+              required
+            />
+        </div>
+         <div>
+          <PasswordInput
+           
+              label="New Transaction Pin"
+              id="accountNumber"
+              name="amount"
+              placeholder="Enter Amount"
+              value={"Amount"}
+              required
+            />
         </div>
       </div>
     </div>

@@ -20,7 +20,6 @@ const InputOtp = () => {
   const handleSubmit = () => {
     if (otpValue.length === 4) {
       setIsSubmitting(true);
-      // Simulate API call
       setTimeout(() => {
         setIsSubmitting(false);
         setSubmitSuccess(true);
@@ -59,7 +58,7 @@ const InputOtp = () => {
             onClick={handleSubmit}
             disabled={otpValue.length !== 4 || isSubmitting}
             className={`
-              w-full py-3 px-2 rounded-lg font-medium text-white
+              w-full py-3 px-4 rounded-lg font-medium text-white
               transition-colors duration-200
               ${otpValue.length === 4 && !isSubmitting
                 ? 'bg-primary-01 hover:bg-primary-02 cursor-pointer'
@@ -71,9 +70,9 @@ const InputOtp = () => {
           </Button>
           
           <Button
-            size="md"
+            size="lg"
             onClick={handleCancel}
-            className="w-full py-2 px-2 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            className="w-full py-3 px-4 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200"
           >
             Cancel
           </Button>

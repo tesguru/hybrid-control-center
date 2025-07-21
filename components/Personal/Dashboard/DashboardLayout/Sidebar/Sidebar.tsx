@@ -6,11 +6,14 @@ import { useRouter } from 'next/navigation';
 import { 
   Home, 
   User, 
-  ArrowLeftRight, 
   LogOut,
   ChevronDown,
   BarChart3,
-  Settings,
+  Shield,
+  CreditCard,
+  TrendingUp,
+  UserCog,
+  Receipt,
   Menu,
   X
 } from "lucide-react";
@@ -107,21 +110,21 @@ export const Sidebar = ({ activePath }: SidebarProps) => {
      { 
       id: 'transfer-history', 
       label: 'Transaction History', 
-      icon: User, 
+      icon: Receipt, 
       href: URLS.DASHBOARD.PERSONAL.TRANSACTIONHISTORY,
       active: activePath === URLS.DASHBOARD.PERSONAL.TRANSACTIONHISTORY
     },
     { 
       id: 'bank-statement', 
       label: 'Bank Statement', 
-      icon: User, 
+      icon: TrendingUp, 
       href: URLS.DASHBOARD.PERSONAL.BANKSTATEMENT,
       active: activePath === URLS.DASHBOARD.PERSONAL.BANKSTATEMENT
     },
     { 
       id: 'bill-payment', 
       label: 'Bill Payment', 
-      icon: Settings, 
+      icon: Shield, 
       hasSubmenu: true,
       active: false, 
       subItems: [
@@ -130,17 +133,34 @@ export const Sidebar = ({ activePath }: SidebarProps) => {
       ]
     },
     { 
-      id: 'transfers', 
-      label: 'Transfers', 
-      icon: ArrowLeftRight, 
+      id: 'cards', 
+      label: 'Cards', 
+      icon: CreditCard, 
       hasSubmenu: true,
       active: false, 
       subItems: [
-        { id: 'internal', label: 'Internal Transfer', href: '/transfers/internal' },
-        { id: 'external', label: 'External Transfer', href: '/transfers/external' },
-        { id: 'international', label: 'International Transfer', href: '/transfers/international' },
+        { id: 'request-debit-card', label: 'Request Debit Card', href: URLS.DASHBOARD.PERSONAL.REQUESTDEBITCARD },
+        { id: 'retrieve-card-pin', label: 'Retrieve Card Pin', href: URLS.DASHBOARD.PERSONAL.RETRIEVECARDPIN },
+        { id: 'card-control', label: 'Card Control', href: URLS.DASHBOARD.PERSONAL.CARDCONTROL }
       ]
     },
+     { 
+      id: 'self-service', 
+      label: 'Self Service', 
+      icon: UserCog, 
+      hasSubmenu: true,
+      active: false, 
+      subItems: [
+        { id: 'view-customer-info', label: 'View Customer Info', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_VIEWCUSTOMERINFO },
+        { id: 'update-info', label: 'Update Info', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_UPDATEINFO },
+        { id: 'change-transaction-pin', label: 'Change Transaction Pin', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_CHANGETRANSACTIONPIN },
+        { id: 'security-question', label: 'Security Question', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_SECURITYQUESTION },
+        { id: 'view-download-t-and-c', label: 'View/Download T&C', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_DOWNLOAD_T_AND_C },
+        { id: 'account-officer-details', label: 'Account Officer Details', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_ACCOUNTOFFICERDETAILS },
+        { id: 'complaint-form', label: 'Complaint Form', href: URLS.DASHBOARD.PERSONAL.SELFSERVICE_COMPLAINTFORM },
+      ]
+    },
+    
   ];
 
   const toggleExpanded = (itemId: string) => {
