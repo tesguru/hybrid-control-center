@@ -19,12 +19,11 @@ const TransactionSuccessfulModal: React.FC<TransactionSuccessProps> = ({
 
   useEffect(() => {
     if (showAnimation) {
-      // Start check animation after a brief delay
+     
       const checkTimer = setTimeout(() => {
         setShowCheck(true);
       }, 100);
 
-      // Show content after check animation
       const contentTimer = setTimeout(() => {
         setShowContent(true);
         onAnimationComplete();
@@ -35,7 +34,7 @@ const TransactionSuccessfulModal: React.FC<TransactionSuccessProps> = ({
         clearTimeout(contentTimer);
       };
     } else {
-      // If no animation, show everything immediately
+    
       setShowCheck(true);
       setShowContent(true);
     }
@@ -62,7 +61,7 @@ const TransactionSuccessfulModal: React.FC<TransactionSuccessProps> = ({
               `}
             />
             
-            {/* Check Mark */}
+     
             <Check 
               className={`
                 w-10 h-10 text-white relative z-10
@@ -74,7 +73,7 @@ const TransactionSuccessfulModal: React.FC<TransactionSuccessProps> = ({
           </div>
         </div>
 
-        {/* Title */}
+  
         <div 
           className={`
             text-center mb-8 transform transition-all duration-500 ease-out
@@ -86,7 +85,7 @@ const TransactionSuccessfulModal: React.FC<TransactionSuccessProps> = ({
           </h1>
         </div>
 
-        {/* Download Button */}
+     
         <div 
           className={`
             flex justify-center transform transition-all duration-500 ease-out delay-100

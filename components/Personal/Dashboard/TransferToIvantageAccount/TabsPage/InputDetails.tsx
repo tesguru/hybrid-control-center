@@ -52,18 +52,7 @@ const InputDetails = () => {
       </div>
       <div className="grid md:grid-cols-2  md:gap-30 w-full">
         
-        {/* <div>
-          <Dropdown
-            width="xl"
-            label="Transfer to"
-            id="account-number"
-            value={selectedAccount}
-            onChange={(e) => setSelectedAccount(e.target.value)}
-            options={accountNumber}
-          />
-
-
-        </div> */}
+    
 
      
           <div>

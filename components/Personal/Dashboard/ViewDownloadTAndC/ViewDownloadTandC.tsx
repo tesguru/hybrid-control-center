@@ -9,11 +9,11 @@ const ViewDownloadTandC = () => {
   const generatePDF = () => {
     const doc = new jsPDF();
     
-    // Add title
+  
     doc.setFontSize(18);
     doc.text('Terms and Conditions', 105, 20, { align: 'center' });
     
-    // Add content
+  
     doc.setFontSize(11);
     const text = `
 1. Introduction

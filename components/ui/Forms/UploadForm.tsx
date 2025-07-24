@@ -26,7 +26,7 @@ interface FileUploadProps {
   fileNotSupportedText?: string;
   dropFilesText?: string;
   
-  // Style customization
+
   borderRadius?: string;
   backgroundColor?: string;
   hoverBackgroundColor?: string;
@@ -47,7 +47,7 @@ const FILE_PRESETS = {
 interface FileState {
   file: File;
   id: string;
-  error?: string;
+ error?: string | null;
 }
 
 export function FileUpload({
@@ -59,13 +59,13 @@ export function FileUpload({
   className = '',
   disabled = false,
   
-  // Label props
+
   label,
   labelClassName = '',
   required = false,
   requiredText = '*',
   
-  // Text props with defaults
+
   uploadText,
   subtitle,
   filesSelectedText = 'Selected Files',
@@ -75,7 +75,6 @@ export function FileUpload({
   fileNotSupportedText,
   dropFilesText = 'Drop files here!',
   
-  // Style props with defaults
   borderRadius = 'rounded-lg',
   backgroundColor = 'bg-white',
   hoverBackgroundColor = 'hover:bg-gray-50',
@@ -91,14 +90,14 @@ export function FileUpload({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadIdCounter = useRef(0);
 
-  // Get accepted file types
+
   const acceptedTypes = typeof accept === 'string' && accept in FILE_PRESETS
     ? FILE_PRESETS[accept as keyof typeof FILE_PRESETS]
     : Array.isArray(accept)
     ? accept
     : FILE_PRESETS.all;
 
-  // Generate default text based on accept type and maxSize
+
   const getUploadText = () => {
     if (uploadText) return uploadText;
     
@@ -126,7 +125,7 @@ export function FileUpload({
     return fileNotSupportedText || `File type not supported. Accepted: ${acceptedTypes.join(', ')}`;
   };
 
-  // Validate file
+
   const validateFile = (file: File): string | null => {
     if (file.size > maxSize * 1024 * 1024) {
       return getFileTooLargeText();
@@ -142,7 +141,7 @@ export function FileUpload({
     return null;
   };
 
-  // Handle file selection
+
   const handleFiles = useCallback((fileList: FileList) => {
     const newFiles: FileState[] = [];
     const validFiles: File[] = [];
@@ -234,7 +233,7 @@ export function FileUpload({
 
   return (
     <div className={`w-full ${className}`}>
-      {/* Label */}
+ 
       {label && (
         <label className={`block text-sm font-medium ${labelColor} mb-1 ${labelClassName}`}>
           {label}
@@ -273,29 +272,28 @@ export function FileUpload({
           disabled={disabled}
         />
 
-        {/* Clean Upload State */}
+  
         {!hasFiles && (
           <div className="text-center py-6 px-4">
-            {/* Icon Circle */}
+       
             <div className="flex justify-center mb-3">
               <div className={`w-12 h-12 ${iconBackgroundColor} rounded-full flex items-center justify-center`}>
                 <Upload className={`w-5 h-5 ${iconColor}`} />
               </div>
             </div>
-            
-            {/* Main Text */}
+        
             <div className={`font-medium ${textColor} text-sm mb-1`}>
               {getUploadText()}
             </div>
             
-            {/* Subtitle */}
+            
             <div className={`${subtitleColor} text-xs`}>
               {getSubtitle()}
             </div>
           </div>
         )}
 
-        {/* Files Display */}
+     
         {hasFiles && (
           <div className="p-3">
             <div className="flex items-center justify-between mb-2">

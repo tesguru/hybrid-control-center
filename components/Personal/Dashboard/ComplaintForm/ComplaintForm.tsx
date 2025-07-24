@@ -70,14 +70,16 @@ const ComplaintForm = () => {
           </div>  
 
         </div>
-         <TextArea
-        label="Your Message (Mon 250 characters)"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        maxLength={250}
-        placeholder="Type your message here..."
-        className="mb-4"
-      />
+       <TextArea
+  label="Your Message (Mon 250 characters)"
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  maxLength={250}
+  placeholder="Type your message here..."
+  className="mb-4"
+/>
+
+
         <Button  className="bg-primary-01 text-white ">Submit</Button>
         </form>
     </div>

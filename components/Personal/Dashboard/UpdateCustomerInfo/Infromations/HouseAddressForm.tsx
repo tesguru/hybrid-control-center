@@ -9,8 +9,8 @@ export default function HouseAddressForm() {
   const handleFileUpload = async (files: File[]) => {
     console.log("Files uploaded:", files);
     setUploadedFiles((prev) => [...prev, ...files]);
-
-    files.forEach((file) => {});
+console.log(uploadedFiles);
+    // files.forEach((file) => {}); 
   };
 
   const handleError = (error: string, file?: File) => {
@@ -42,12 +42,11 @@ export default function HouseAddressForm() {
       </div>
       <div>
         <FileUpload
-          onUpload={handleFileUpload}
-          label="Recent utility bill of new address "
-          onError={handleError}
-          autoUpload={false} // Set to false so files don't auto-upload
-          hidePreview={false} // Show preview in component
-        />
+  onFileSelect={handleFileUpload}
+  label="Recent utility bill of new address"
+  onError={handleError}
+/>
+
       </div>
     
     </div>

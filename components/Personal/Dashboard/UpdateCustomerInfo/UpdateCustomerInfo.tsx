@@ -7,10 +7,7 @@ import HouseAddressForm from './Infromations/HouseAddressForm'
 import EmailAddressForm from './Infromations/EmailForm'
 import PhoneNumberForm from './Infromations/PhoneNumberForm'
 import NextOfKinForm from './Infromations/NextOfKinForm'
-// Import other forms here if needed in the future
-// import Email from './Infromations/EmailForm'
-// import Address from './Infromations/AddressForm'
-// import PhoneNumber from './Infromations/PhoneForm'
+
 
 const UpdateCustomerInfo = () => {
   const Information = [

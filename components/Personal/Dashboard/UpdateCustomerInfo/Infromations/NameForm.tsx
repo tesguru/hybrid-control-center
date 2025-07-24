@@ -9,8 +9,8 @@ export default function NameForm() {
   const handleFileUpload = async (files: File[]) => {
     console.log("Files uploaded:", files);
     setUploadedFiles((prev) => [...prev, ...files]);
-
-    files.forEach((file) => {});
+  console.log(uploadedFiles);
+    // files.forEach((file) => {});
   };
 
   const handleError = (error: string, file?: File) => {
@@ -42,29 +42,23 @@ export default function NameForm() {
       </div>
       <div>
         <FileUpload
-          onUpload={handleFileUpload}
+          onFileSelect={handleFileUpload}
           label="Valid ID with new name or old name"
           onError={handleError}
-          autoUpload={false} // Set to false so files don't auto-upload
-          hidePreview={false} // Show preview in component
         />
       </div>
       <div>
         <FileUpload
-          onUpload={handleFileUpload}
+          onFileSelect={handleFileUpload}
           label="Affidavit"
           onError={handleError}
-          autoUpload={false} // Set to false so files don't auto-upload
-          hidePreview={false} // Show preview in component
         />
       </div>
       <div>
         <FileUpload
-          onUpload={handleFileUpload}
+          onFileSelect={handleFileUpload}
           label="Newspaper Publication"
           onError={handleError}
-          autoUpload={false} // Set to false so files don't auto-upload
-          hidePreview={false} // Show preview in component
         />
       </div>
       <div>

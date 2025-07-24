@@ -88,7 +88,7 @@ export const ExportReusableTable = <T extends { id: string }>({
   const handleExport = (type: 'pdf' | 'csv') => {
     try {
       if (type === 'csv') {
-        // Create CSV content
+       
         const headers = columns.map(col => col.label).join(',');
         const rows = sortedData.map(row => 
           columns.map(col => {
@@ -100,7 +100,7 @@ export const ExportReusableTable = <T extends { id: string }>({
         
         const csvContent = [headers, ...rows].join('\n');
         
-        // Create and download CSV file
+    
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         const url = URL.createObjectURL(blob);
@@ -178,7 +178,7 @@ export const ExportReusableTable = <T extends { id: string }>({
 
   return (
     <div className={`bg-white rounded-lg shadow-sm border border-gray-200 ${className}`}>
-      {/* Header with Filter and Search */}
+    
       <div className="p-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
