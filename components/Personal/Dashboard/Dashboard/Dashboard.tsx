@@ -25,19 +25,19 @@ const Dashboard = () => {
             />
             
             <DashboardCard
-              type="investment"
-              title="Investment Account"
-              maturityAmount="N1,000,000.00"
-              principalAmount="N500,000.00"
+             type="saving"
+              title="Saving Account"
+              accountName="Olasupo Tunde Clinton"
+              balance="N400,000.00"
             />
             
-            <DashboardCard
+            {/* <DashboardCard
               type="mortgage"
               title="Mortgage Account"
               maturityAmount="N350,000.00"
               principalAmount="N500,000.00"
               interestRate="10%"
-            />
+            /> */}
             
             {/* <DashboardCard
               type="investment-action"
@@ -45,7 +45,9 @@ const Dashboard = () => {
               className="flex items-center justify-center"
             /> */}
           </div>
+          <div className="pt-40">
           <PromoCard />
+          </div>
         </div>
       </div>
     </div>

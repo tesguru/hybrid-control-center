@@ -2,7 +2,7 @@
 import { ReusableNormalTable, Column, TableData } from "@/components/ui/Tables/normaltable";
 
 
-export const AccountInformationTable: React.FC = () => {
+export const CurrentAccountTable: React.FC = () => {
   const sampleData: TableData[] = [
    {
       id: '1',
@@ -11,15 +11,6 @@ export const AccountInformationTable: React.FC = () => {
       accounttype: 'Current Account',
       currency: 'NGN',
       accountbalance: 'N 200,000.00',
-      accountstatus: 'Active'
-    },
-    {
-      id: '2',
-      accountname: 'Olasupo Tunde Clinton',
-      accountnumber: '023456789',
-      accounttype: 'Current Account',
-      currency: 'NGN',
-      accountbalance: 'N 500,000.00',
       accountstatus: 'Active'
     }
    
@@ -93,4 +84,4 @@ export const AccountInformationTable: React.FC = () => {
   );
 };
 
-export default AccountInformationTable;
+export default CurrentAccountTable;

@@ -1,8 +1,17 @@
 import { z } from 'zod';
 
 export const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+  accountNumber: z.string()
+    .min(10, "Account number must be exactly 10 characters")
+    .max(10, "Account number must be exactly 10 characters")
+    .regex(/^\d+$/, "Account number must contain only numbers"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .max(32, "Password cannot exceed 32 characters")
+    // .regex(
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+    //   "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+    // ),
 });
 
 export const signupSchema = loginSchema.extend({

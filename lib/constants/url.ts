@@ -8,6 +8,7 @@ export const URLS = {
     CORPORATE: {
       LOGIN: '/corporate/login',
       REGISTER: '/corporate/register',
+      MYACCOUNT: '/corporate/my-account',
       FORGOT_PASSWORD: '/corporate/forgot-password',
     },
   },

@@ -2,6 +2,8 @@
 
 import { useInitialRender } from "../hooks/useInitialRender";
 import { QueryProvider } from "./QueryProviders";
+import { ToastProvider } from "./Toast";
+
 
 
 
@@ -13,7 +15,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
      <QueryProvider>
-        {children}
+      <ToastProvider>{children}</ToastProvider>
+    
      </QueryProvider>
   );
 }

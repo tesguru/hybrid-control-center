@@ -9,6 +9,7 @@ interface PasswordInputProps extends InputHTMLAttributes<HTMLInputElement> {
   containerClass?: string;
   labelClass?: string;
   inputClass?: string;
+  error?: string; 
 }
 
 export function PasswordInput({
@@ -17,6 +18,7 @@ export function PasswordInput({
   containerClass = '',
   labelClass = '',
   inputClass = '',
+  error,
   ...inputProps
 }: PasswordInputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -25,11 +27,26 @@ export function PasswordInput({
     setShowPassword(!showPassword);
   };
 
+  // Dynamic input classes based on error state
+  const getInputClasses = () => {
+    let baseClasses = `w-full px-4 py-3 pr-10 border rounded-lg focus:outline-none focus:ring-2 focus:border-transparent ${inputClass}`;
+    
+    if (error) {
+      baseClasses += ' border-red-500 focus:ring-red-500';
+    } else {
+      baseClasses += ' border-gray-300 focus:ring-primary-01';
+    }
+
+    return baseClasses;
+  };
+
   return (
     <div className={`${containerClass}`}>
       <label 
         htmlFor={id} 
-        className={`block text-sm font-medium text-gray-700 mb-2 ${labelClass}`}
+        className={`block text-sm font-medium mb-2 ${
+          error ? 'text-red-700' : 'text-gray-700'
+        } ${labelClass}`}
       >
         {label}
       </label>
@@ -37,7 +54,9 @@ export function PasswordInput({
         <input
           id={id}
           type={showPassword ? 'text' : 'password'}
-          className={`w-full px-4 py-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-01 focus:border-transparent ${inputClass}`}
+          className={getInputClasses()}
+          aria-invalid={error ? 'true' : 'false'}
+          aria-describedby={error ? `${id}-error` : undefined}
           {...inputProps}
         />
         <button
@@ -53,6 +72,11 @@ export function PasswordInput({
           )}
         </button>
       </div>
+      {error && (
+        <p id={`${id}-error`} className="mt-1 text-sm text-red-600">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

@@ -2,25 +2,16 @@
 import { ReusableNormalTable, Column, TableData } from "@/components/ui/Tables/normaltable";
 
 
-export const InvestmentAccountTable: React.FC = () => {
+export const SavingAccountTable: React.FC = () => {
   const sampleData: TableData[] = [
    {
       id: '1',
-      accountnumber: '02345679900',
-      maturitydate: '20/09/2022',
-      maturityamount: 'N2,500,000',
-      interestrate: '15%',
-      principalamount: 'N 200,000.00',
-      tenor: '3 years'
-    },
-    {
-      id: '2',
-      accountnumber: '02345678900',
-      maturitydate: '20/09/2022',
-      maturityamount: 'N2,500,000',
-      interestrate: '15%',
-      principalamount: 'N 400,000.00',
-      tenor: '3 years'
+      accountname: 'Olasupo Tunde Clinton',
+      accountnumber: '023456709',
+      accounttype: 'Current Account',
+      currency: 'NGN',
+      accountbalance: 'N 200,000.00',
+      accountstatus: 'Active'
     }
    
   ];
@@ -39,33 +30,33 @@ export const InvestmentAccountTable: React.FC = () => {
     //   )
     // },
     {
+      key: 'accountname',
+      label: 'Account Name',
+    
+    },
+    {
       key: 'accountnumber',
       label: 'Account Number',
     
     },
     {
-      key: 'maturitydate',
-      label: 'Maturity Date',
+      key: 'accounttype',
+      label: 'Account Type',
     
     },
     {
-      key: 'maturityamount',
-      label: 'Maturity Amount',
-    
-    },
-    {
-      key: 'interestrate',
-      label: 'Interest Rate',
+      key: 'currency',
+      label: 'Currency',
      
     },
     {
-      key: 'principalamount',
-      label: 'Principal Amount',
+      key: 'accountbalance',
+      label: 'Account Balance',
     
     },
     {
-      key: 'tenor',
-      label: 'Tenor',
+      key: 'accountstatus',
+      label: 'Account Status',
     
     }
   ];
@@ -75,11 +66,14 @@ export const InvestmentAccountTable: React.FC = () => {
   // };
 
   return (
-    <div className="py-4 ">
-       <div className=" py-4 border-gray-900 font-bold">
-        <p>Investment Account(s)</p>
+    <div className="pt-2 ">
+      <div className="border-b py-4 border-gray-300 font-bold">
+        {/* <p>View Account Information</p> */}
       </div>
-      <div className="">
+       <div className=" py-4 border-gray-900 font-bold">
+        <p>Saving Account(s)</p>
+      </div>
+      <div className="pb-4">
         <ReusableNormalTable
           data={sampleData}
           columns={columns}
@@ -90,4 +84,4 @@ export const InvestmentAccountTable: React.FC = () => {
   );
 };
 
-export default InvestmentAccountTable;
+export default SavingAccountTable;

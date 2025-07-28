@@ -2,7 +2,7 @@
 import { Eye } from 'lucide-react';
 
 interface DashboardCardProps {
-  type: 'current' | 'investment' | 'mortgage' | 'investment-action';
+  type: 'current' | 'investment' | 'saving' | 'investment-action';
   title: string;
   accountName?: string;
   balance?: string;
@@ -26,7 +26,7 @@ export const DashboardCard = ({
     const backgrounds = {
       'current': '/Card-1.png',
       'investment': '/Card-2.png',
-      'mortgage': '/Card-3.png',
+      'saving': '/Card-3.png',
       'investment-action': '/Card-4.png'
     };
     return backgrounds[type];

@@ -7,7 +7,7 @@ interface InputFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 's
   labelClass?: string;
   inputClass?: string;
   inputSize?: 'sm' | 'md' | 'lg' | 'xl'; // Renamed from 'size' to 'inputSize'
-  error?: string;
+  error?: any;
   helperText?: string;
 }
 
