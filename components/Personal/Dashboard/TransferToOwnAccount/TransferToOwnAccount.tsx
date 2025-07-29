@@ -70,17 +70,20 @@ const TransferToOwnAccount = () => {
   const handleFinalSubmit = () => {
     const formData = methods.getValues();
 
-    transferToOwnAccount.mutate(
-      {
-        ...formData
-        // otp: otpValue,
-      },
-      {
-        onSuccess: () => {
-          nextStep(); // Move to success step after successful transfer
-        }
-      }
-    );
+    // transferToOwnAccount.mutate(
+    //   {
+    //     ...formData
+    //     // otp: otpValue,
+    //   }
+    //   {
+    //     onSuccess: () => {
+    //       nextStep(); // Move to success step after successful transfer
+    //     }
+    //   }
+    // );
+    console.log(formData);
+
+     nextStep();
   };
 
   const renderStepContent = () => {
