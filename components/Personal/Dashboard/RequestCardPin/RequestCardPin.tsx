@@ -3,35 +3,31 @@ import React, { useState } from "react";
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import { URLS } from "@/lib/constants/url";
 import InputDetails from "./TabsPage/InputDetails";
-import TransactionSummary from "./TabsPage/TransactionSummary";
 import Button from "@/components/ui/Button/Button";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  airtimePaymentForm,
-  airtimePaymentSchema,
-} from "@/lib/schemas/transferschema";
 import "../../../ui/Transformation.css";
 import { InputOtp } from "./TabsPage/InputOtp";
 import { useTransfer } from "@/lib/hooks/Personal/Dashboard/Transfer/useTransfer";
-import SuccessModal from "@/components/ui/modals/SucessfulModal";
+import { requestCardPinForm, requestCardPinSchema } from "@/lib/schemas/cardschema";
+import OTPDemo from "./TabsPage/InputPin";
 
-const BillPaymentAirtime = () => {
+
+const RequestCardPin = () => {
   const [step, setStep] = useState(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [otpValue, setOtpValue] = useState("");
 
   const { transferToOwnAccount } = useTransfer();
 
- const methods = useForm<airtimePaymentForm>({
-  resolver: zodResolver(airtimePaymentSchema),
+ const methods = useForm<requestCardPinForm>({
+  resolver: zodResolver(requestCardPinSchema),
   mode: "onChange",            
   reValidateMode: "onChange",
   defaultValues: {
-    fromAccount: "",
-    amount: "",
-    network: "",
-    mobileNumber: "",
+  fromAccount:"",
+  secretQuestion:"",
+  answer:"",
   },
 });
 
@@ -42,7 +38,7 @@ const BillPaymentAirtime = () => {
       if (!isValid) return;
     }
 
-    if (step < 4) {
+    if (step < 3) {
       setIsTransitioning(true);
       setTimeout(() => {
         setStep(step + 1);
@@ -61,11 +57,11 @@ const BillPaymentAirtime = () => {
     }
   };
 
-  const resetForm = () => {
-    methods.reset();
-    setOtpValue("");
-    setStep(1);
-  };
+  // const resetForm = () => {
+  //   methods.reset();
+  //   setOtpValue("");
+  //   setStep(1);
+  // };
 
   const handleFinalSubmit = () => {
     const formData = methods.getValues();
@@ -90,9 +86,8 @@ const BillPaymentAirtime = () => {
     switch (step) {
       case 1:
         return <InputDetails />;
+
       case 2:
-        return <TransactionSummary data={methods.getValues()} />;
-      case 3:
         return (
           <InputOtp
             value={otpValue}
@@ -102,19 +97,10 @@ const BillPaymentAirtime = () => {
             onCancel={() => setOtpValue("")}
           />
         );
-      case 4:
+      case 3:
         return (
           <>
-            <SuccessModal title="Airtime Purchase Sucessful" />
-            <div className="py-4">
-              <Button
-                type="button"
-                onClick={resetForm}
-                className="text-black bg-gray-200 text-sm hover:bg-primary"
-              >
-                  Perform Another Transaction 
-              </Button>
-            </div>
+            <OTPDemo/>
           </>
         );
       default:
@@ -124,19 +110,17 @@ const BillPaymentAirtime = () => {
 
   return (
     <DashboardLayout urlpath={URLS.DASHBOARD.PERSONAL.TRANSFER}>
-      <h1 className="font-bold text-xl">Bill Payment</h1>
+      <h1 className="font-bold text-xl">Cards</h1>
 
       <div className="bg-white border mt-8 border-gray-200 px-14 rounded-xl transfer-form-container transfer-form">
         {step < 4 && (
           <div className="border-b py-6 border-gray-300 flex font-bold justify-between">
             <p className="step-title">
               {step === 1
-                ? "Airtime Purchase"
-                : step === 2
-                ? "Transaction Summary"
-                : "Enter Transaction Pin"}
+                ? "Retrieve Debit Card Pin"
+                : "Retrieve Debit Card Pin"}
             </p>
-            <p>Step {step} of 3</p>
+            <p>Step {step} of 2</p>
           </div>
         )}
 
@@ -144,7 +128,7 @@ const BillPaymentAirtime = () => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              step < 3 ? nextStep() : handleFinalSubmit();
+              step < 2 ? nextStep() : handleFinalSubmit();
             }}
           >
             <div className="py-6">
@@ -153,7 +137,7 @@ const BillPaymentAirtime = () => {
               </div>
             </div>
 
-            {step < 3 && (
+            {step < 2 && (
               <div className="flex justify-between py-4">
                 {step > 1 ? (
                   <button
@@ -183,4 +167,4 @@ const BillPaymentAirtime = () => {
   );
 };
 
-export default BillPaymentAirtime;
+export default RequestCardPin;

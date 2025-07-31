@@ -1,5 +1,5 @@
 import { Dropdown } from "@/components/ui/Forms/Dropdown";
-
+import { InputField } from "@/components/ui/Forms/InputField";
 import { useFormContext } from "react-hook-form";
 
 const accountNumberOptions = [
@@ -8,7 +8,7 @@ const accountNumberOptions = [
 ];
 
 
-const selectReason = [
+const secretQuestions = [
   { value: "Transfer", label: "Transfer" },
   { value: "Withdrawal", label: "For Withdrawal" },
 ];
@@ -17,14 +17,14 @@ const selectReason = [
 
 const InputDetails = () => {
   const {
+    register,
     setValue,
     watch,
     formState: { errors },
   } = useFormContext();
 
   const fromAccount = watch("fromAccount");
-  const reason = watch("reason");
- 
+   const secretQuestion = watch("secretQuestion");
 
   return (
     <div className="flex flex-col md:flex-row gap-6 w-full my-4">
@@ -40,22 +40,32 @@ const InputDetails = () => {
           options={accountNumberOptions}
           error={errors.fromAccount?.message as string}
         />
-    
+     <Dropdown
+          label="Secret Question "
+          id="secretquestion"
+          value={secretQuestion}
+          onChange={(e) =>
+            setValue("secretQuestion", e.target.value, { shouldValidate: true })
+          }
+          options={secretQuestions}
+          error={errors.secretQuestion?.message as string}
+        />
          
       </div>
 
-      {/* Right Column */}
+  
       <div className="flex flex-col gap-6 w-full">
-      <Dropdown
-          label="Select Reason"
-          id="selectreason"
-          value={reason}
-          onChange={(e) =>
-            setValue("reason", e.target.value, { shouldValidate: true })
-          }
-          options={selectReason}
-          error={errors.accountToLink?.message as string}
-        />
+  
+     
+  <InputField
+           label="Answer"
+           id="answer"
+           placeholder="Enter Answer"
+           error={errors.answer?.message}
+           {...register("answer")}
+         />
+
+         
       </div>
     </div>
   );

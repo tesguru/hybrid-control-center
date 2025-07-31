@@ -1,49 +1,57 @@
 import { Dropdown } from "@/components/ui/Forms/Dropdown";
 import { InputField } from "@/components/ui/Forms/InputField";
-import React, { useState } from "react";
+import React from "react";
+import { useFormContext } from "react-hook-form";
 
 const InputDetails = () => {
-  const accountNumber = [
-    { value: "accountnumber", label: "Current Account - 025467890900" },
-    { value: "accountnumbers", label: "Current Account - 025467890900" },
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+ 
+
+  const bankAccounts = [
+    { value: "Opay", label: "Opay" },
+    { value: "Moniepoint", label: "Moniepoint" },
   ];
-  const [selectedAccount, setSelectedAccount] = useState("");
+
+
+  const bank = watch("bank");
+
   return (
-    <div className="md:flex md:gap-30 my-4">
-      <div className="md:space-y-6">
-        <div className="">
-           <InputField
-              label="Amount"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
-        </div>
-          <div>
+    <div className="space-y-4 w-full">
+      <div className="grid grid-cols-2  gap-18 w-full">
+          <div className="">
             <InputField
-              label="Account Name"
+              label="Account Number"
               id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
+              placeholder="Enter Account Number"
+              error={errors.accountNumber?.message}
+              {...register("accountNumber")}
             />
+          </div>
+<Dropdown
+          label="Select Bank"
+          id="bank"
+          value={bank}
+          onChange={(e) =>
+            setValue("bank", e.target.value, { shouldValidate: true })
+          }
+          options={bankAccounts}
+          error={errors.bank?.message as string}
+        />
         
-        </div>
       </div>
-      <div className="md:space-y-5">
-        <div>
-          <Dropdown
-             width="responsive"
-            label="Select Bank"
-            id="account-number"
-            value={selectedAccount}
-            onChange={(e) => setSelectedAccount(e.target.value)}
-            options={accountNumber}
-          />
-        </div>
+      <div className="md:w-[46%]">
+        <InputField
+          label="Account Name"
+          id="accountName"
+          placeholder="Enter Account Name"
+          error={errors.accountName?.message}
+          {...register("accountName")}
+        />
       </div>
     </div>
   );

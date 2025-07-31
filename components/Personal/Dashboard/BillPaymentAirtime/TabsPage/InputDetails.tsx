@@ -1,64 +1,74 @@
 import { Dropdown } from "@/components/ui/Forms/Dropdown";
 import { InputField } from "@/components/ui/Forms/InputField";
-import React, { useState } from "react";
+import { useFormContext } from "react-hook-form";
+
+const accountNumberOptions = [
+  { value: "023456789", label: "Current Account - 023456789" },
+  { value: "23456709", label: "Saving Account - 023456709" },
+];
+
+const networks = [
+  { value: "MTN", label: "MTN" },
+  { value: "GLO", label: "GLO" },
+];
 
 const InputDetails = () => {
-  const accountNumber = [
-    { value: "accountnumber", label: "Current Account - 025467890900" },
-    { value: "accountnumbers", label: "Current Account - 025467890900" },
-  ];
-  const [selectedAccount, setSelectedAccount] = useState("");
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext();
+
+  const fromAccount = watch("fromAccount");
+  const network = watch("network");
+
   return (
-    <div className="md:flex md:gap-30 my-4">
-      <div className="md:space-y-6">
-        <div className="">
-            <Dropdown
-          width="xl"
-          label="Account Debit"
-          id="account-number"
-          value={selectedAccount}
-          onChange={(e) => setSelectedAccount(e.target.value)}
-          options={accountNumber}
+    <div className="flex flex-col md:flex-row gap-6 w-full my-4">
+   
+      <div className="flex flex-col gap-6 w-full">
+        <Dropdown
+          label="Account to Debit"
+          id="fromAccount"
+          value={fromAccount}
+          onChange={(e) =>
+            setValue("fromAccount", e.target.value, { shouldValidate: true })
+          }
+          options={accountNumberOptions}
+          error={errors.fromAccount?.message as string}
         />
-        </div>
-          <div>
-            <InputField
-              label="Amount"
-              id="accountNumber"
-              name="amount"
-              placeholder="Enter Amount"
-              value={"Amount"}
-              required
-            />
+  <InputField
+          label="Amount"
+          id="amount"
+          placeholder="Enter Amount"
+          {...register("amount")}
+          error={errors.amount?.message}
+        />
         
-        </div>
+
+      
       </div>
-      <div className="md:space-y-5">
-        <div>
-          <Dropdown
-              width="responsive"
-            label="Network"
-            id="account-number"
-            value={selectedAccount}
-            onChange={(e) => setSelectedAccount(e.target.value)}
-            options={accountNumber}
-          />
 
+      {/* Right Column */}
+      <div className="flex flex-col gap-6 w-full">
+      <Dropdown
+          label="Network"
+          id="network"
+          value={network}
+          onChange={(e) =>
+            setValue("network", e.target.value, { shouldValidate: true })
+          }
+          options={networks}
+          error={errors.networks?.message as string}
+        />
 
-        </div>
-
-     
-          <div>
-            <InputField
-              label="Narration"
-              id="accountNumber"
-              name="accountNumber"
-              placeholder="Enter Narration"
-              value={"Account"}
-              required
-            />
-          </div>
-    
+        <InputField
+          label="Mobile Number"
+          id="mobileNumber"
+          placeholder="Enter Mobile Number"
+          {...register("mobileNumber")}
+          error={errors.mobileNumber?.message}
+        />
       </div>
     </div>
   );

@@ -1,40 +1,19 @@
 import Button from "@/components/ui/Button/Button";
 import { OTPInput } from "@/components/ui/Forms/InputOtp";
-import TransactionSuccessfulModal from "@/components/ui/modals/TransactionSucessfulModal";
-import { useState } from "react";
 
-const InputOtp = () => {
-  const [otpValue, setOtpValue] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const handleOTPComplete = (value: string) => {
-    console.log('OTP Complete:', value);
-    setOtpValue(value);
-  };
-
-  const handleOTPChange = (value: string) => {
-    setOtpValue(value);
-  };
-
-  const handleSubmit = () => {
-    if (otpValue.length === 4) {
-      setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
-        setSubmitSuccess(true);
-      }, 1000);
-    }
-  };
-
-  const handleCancel = () => {
-    setOtpValue('');
-  };
-
-  if (submitSuccess) {
-    return <TransactionSuccessfulModal />;
-  }
-
+export const InputOtp = ({
+  value,
+  onChange,
+  isSubmitting,
+  onSubmit,
+  onCancel
+}: {
+  value: string
+  onChange: (val: string) => void
+  isSubmitting: boolean
+  onSubmit: () => void
+  onCancel: () => void
+}) => {
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="bg-white rounded-lg w-full max-w-md">
@@ -46,21 +25,21 @@ const InputOtp = () => {
         <div className="flex justify-center mb-6">
           <OTPInput
             length={4}
-            onComplete={handleOTPComplete}
-            onChange={handleOTPChange}
-            value={otpValue}
-            autoFocus={true}
+            onComplete={onChange}
+            onChange={onChange}
+            value={value}
+            autoFocus
           />
         </div>
         
         <div className="space-y-3">
           <Button
-            onClick={handleSubmit}
-            disabled={otpValue.length !== 4 || isSubmitting}
+            onClick={onSubmit}
+            disabled={value.length !== 4 || isSubmitting}
             className={`
-              w-full py-3 px-4 rounded-lg font-medium text-white
+              w-full py-3 px-2 rounded-lg font-medium text-white
               transition-colors duration-200
-              ${otpValue.length === 4 && !isSubmitting
+              ${value.length === 4 && !isSubmitting
                 ? 'bg-primary-01 hover:bg-primary-02 cursor-pointer'
                 : 'bg-gray-400 cursor-not-allowed'
               }
@@ -70,20 +49,17 @@ const InputOtp = () => {
           </Button>
           
           <Button
-            size="lg"
-            onClick={handleCancel}
-            className="w-full py-3 px-4 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            onClick={onCancel}
+            className="w-full py-2 px-2 rounded-lg font-medium bg-gray-200 text-gray-700 border-2 border-gray-300 hover:bg-gray-50"
           >
             Cancel
           </Button>
         </div>
         
         <p className="text-sm text-gray-500 text-center mt-4">
-          Didn't receive the code? <button className="text-primary-01 hover:underline">Resend</button>
+          Didn't receive the code? <button className="text-primary-04 hover:underline">Resend</button>
         </p>
       </div>
     </div>
   );
 };
-
-export default InputOtp;

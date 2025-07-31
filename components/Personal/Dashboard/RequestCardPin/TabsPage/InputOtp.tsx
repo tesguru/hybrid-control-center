@@ -17,9 +17,8 @@ export const InputOtp = ({
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <div className="bg-white rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-2">Verify Your Account</h2>
-        <p className="text-gray-600 text-center mb-8">
-          Enter the 4-digit code sent to your device
+         <p className="text-gray-600 text-center mb-8">
+         Enter  the OTP sent to your mobile number
         </p>
         
         <div className="flex justify-center mb-6">

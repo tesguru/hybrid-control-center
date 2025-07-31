@@ -1,39 +1,29 @@
 import { DetailRow } from '@/components/ui/Custom/DetailsRow'
 import React from 'react'
 
-const TransactionSummary = () => {
+interface TransactionData {
+  fromAccount: string
+  amount: number | string
+accountName: string
+accountNumber: string
+  beneficiary?: string
+  narration?: string // made optional to avoid type error
+}
+
+interface TransactionSummaryProps {
+  data: TransactionData
+}
+
+const TransactionSummary: React.FC<TransactionSummaryProps> = ({ data }) => {
   return (
-   <div className=" mx-auto bg-white p-6">
-      <div className="space-y-6">
-        
-        <DetailRow 
-          label="From" 
-          value="Current Account - 0234668765" 
-        />
-
-        <DetailRow 
-          label="Beneficiary Name" 
-          value="Olasupo Tunde" 
-        />
-
-        <DetailRow 
-          label="Beneficiary Account Number" 
-          value="Current Account - 0234668765" 
-        />
-
-        <DetailRow 
-          label="Amount" 
-          value="NGN50,000.00" 
-          isAmount={true}
-        />
-
-        <DetailRow 
-          label="Narration" 
-          value="ATM Money" 
-          isLast={true}
-        />
-
-      </div>
+    <div className="mx-auto bg-white p-6 space-y-6">
+      <DetailRow label="From" value={`Current Account - ${data.fromAccount}`} />
+      <DetailRow label="Beneficiary Name" value={data.beneficiary ?? 'Olasupo'} />
+        <DetailRow label="Account Name" value={data.accountName ?? '000000'} />
+            <DetailRow label="Account Number" value={data.accountNumber ?? '00000'} />
+          <DetailRow label="Beneficiary Name" value={data.beneficiary ?? 'Olasupo'} />
+      <DetailRow label="Amount" value={`NGN${data.amount}`} isAmount />
+      <DetailRow label="Narration" value={data.narration ?? '-'} isLast />
     </div>
   )
 }

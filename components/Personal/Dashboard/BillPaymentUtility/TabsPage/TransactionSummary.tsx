@@ -1,39 +1,28 @@
 import { DetailRow } from '@/components/ui/Custom/DetailsRow'
 import React from 'react'
 
-const TransactionSummary = () => {
+interface TransactionData {
+  fromAccount: string
+  utilityProvider: string
+  package: string
+  accountId: string
+  amount: number | string
+  remarks: string
+}
+
+interface TransactionSummaryProps {
+  data: TransactionData
+}
+
+const TransactionSummary: React.FC<TransactionSummaryProps> = ({ data }) => {
   return (
-   <div className=" mx-auto bg-white p-6">
-      <div className="space-y-6">
-        
-        <DetailRow 
-          label="From" 
-          value="Current Account - 0234668765" 
-        />
-
-        <DetailRow 
-          label="Beneficiary Name" 
-          value="Olasupo Tunde" 
-        />
-
-        <DetailRow 
-          label="Beneficiary Account Number" 
-          value="Current Account - 0234668765" 
-        />
-
-        <DetailRow 
-          label="Amount" 
-          value="NGN50,000.00" 
-          isAmount={true}
-        />
-
-        <DetailRow 
-          label="Narration" 
-          value="ATM Money" 
-          isLast={true}
-        />
-
-      </div>
+    <div className="mx-auto bg-white p-6 space-y-6">
+      <DetailRow label="From" value={`Current Account - ${data.fromAccount}`} />
+      <DetailRow label="Utility Provider" value={data.utilityProvider} />
+      <DetailRow label="Package" value={data.package} />
+      <DetailRow label="Account ID" value={data.accountId} />
+      <DetailRow label="Amount" value={`NGN${data.amount}`} />
+      <DetailRow label="Remarks" value={data.remarks} />
     </div>
   )
 }
