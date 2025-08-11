@@ -1,4 +1,4 @@
-import {  OtpInput, SignupInput } from '../schemas/authschema';
+import {  OtpInput, SignupInput } from '../schemas/personalbankingschema/authschema';
 import { apiClient } from '../../app/api/utils/axios';
 
 

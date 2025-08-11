@@ -19,7 +19,7 @@ const { toast } = useToast();
     }
     if(data.data.statusCode === 17){
         toast.success("Sucess!", "Login Successful");
-        router.push(URLS.DASHBOARD.PERSONAL.DASHBOARD);
+        router.push(URLS.DASHBOARD.INDEX);
     }
   },
   onError: (error: any) => {

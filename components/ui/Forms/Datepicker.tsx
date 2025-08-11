@@ -1,170 +1,243 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Calendar } from 'lucide-react';
 
 interface DatePickerProps {
-  onDateSelect: (date: Date) => void;
-  selectedDate?: Date | null;
-  placeholder?: string;
+  name: string;
   label?: string;
+  placeholder?: string;
+  required?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
   className?: string;
+  value?: string;
+  onChange?: (date: string) => void;
+  error?: string;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({ 
-  onDateSelect, 
-  selectedDate = null, 
-  placeholder = "End Date",
-  label = "Select End Date",
-  className = "" 
+export const DatePicker: React.FC<DatePickerProps> = ({
+  name,
+  label = 'Select date',
+  placeholder = 'Select date',
+  required = false,
+  minDate,
+  maxDate,
+  className = '',
+  value = '',
+  onChange,
+  error,
 }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const months: string[] = [
+  // Helper functions to replace date-fns
+  const parseDate = (dateString: string): Date => {
+    return new Date(dateString);
+  };
+
+  const formatDate = (date: Date, formatStr: string): string => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const month = months[date.getMonth()];
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    if (formatStr === 'MMM dd, yyyy') {
+      return `${month} ${day}, ${year}`;
+    } else if (formatStr === 'yyyy-MM-dd') {
+      const monthNum = (date.getMonth() + 1).toString().padStart(2, '0');
+      return `${year}-${monthNum}-${day}`;
+    }
+    return date.toDateString();
+  };
+
+  const isBefore = (date1: Date, date2: Date): boolean => {
+    return date1.getTime() < date2.getTime();
+  };
+
+  const isSameDay = (date1: Date, date2: Date): boolean => {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  };
+
+  const addMonths = (date: Date, months: number): Date => {
+    const newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() + months);
+    return newDate;
+  };
+
+  const subMonths = (date: Date, months: number): Date => {
+    const newDate = new Date(date);
+    newDate.setMonth(newDate.getMonth() - months);
+    return newDate;
+  };
+
+  // Initialize selected date from value
+  useEffect(() => {
+    if (value) {
+      setSelectedDate(parseDate(value));
+      setCurrentMonth(parseDate(value));
+    } else {
+      setSelectedDate(null);
+    }
+  }, [value]);
+
+  const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  const weekdays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
-  const getDaysInMonth = (date: Date): (number | null)[] => {
-    const year: number = date.getFullYear();
-    const month: number = date.getMonth();
-    const firstDay: Date = new Date(year, month, 1);
-    const lastDay: Date = new Date(year, month + 1, 0);
-    const daysInMonth: number = lastDay.getDate();
-    const startingDayOfWeek: number = firstDay.getDay();
-
-    const days: (number | null)[] = [];
+  const getDaysInMonth = (date: Date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
     
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
     
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(null);
-    }
+    const daysArray: (number | null)[] = Array(startingDayOfWeek).fill(null);
     
- 
     for (let day = 1; day <= daysInMonth; day++) {
-      days.push(day);
+      daysArray.push(day);
     }
     
-    return days;
+    return daysArray;
   };
 
-  const navigateMonth = (direction: number): void => {
-    const newDate: Date = new Date(currentDate);
-    newDate.setMonth(currentDate.getMonth() + direction);
-    setCurrentDate(newDate);
-  };
-
-  const selectDate = (day: number | null): void => {
+  const handleDateSelect = (day: number | null) => {
     if (!day) return;
     
-    const selectedDateObj: Date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
-    onDateSelect(selectedDateObj);
+    const newDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    
+    // Validate against min/max dates if provided
+    if (minDate && isBefore(newDate, minDate)) return;
+    if (maxDate && isBefore(maxDate, newDate)) return;
+    
+    setSelectedDate(newDate);
+    onChange?.(formatDate(newDate, 'yyyy-MM-dd'));
     setIsOpen(false);
   };
 
-  const formatDate = (date: Date | null): string => {
-    if (!date) return '';
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+  const navigateMonth = (direction: 'prev' | 'next') => {
+    setCurrentMonth(direction === 'prev' 
+      ? subMonths(currentMonth, 1) 
+      : addMonths(currentMonth, 1)
+    );
   };
 
-  const isSelectedDate = (day: number | null): boolean => {
+  const isDayDisabled = (day: number | null): boolean => {
+    if (!day) return false;
+    
+    const date = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    
+    if (minDate && isBefore(date, minDate)) return true;
+    if (maxDate && isBefore(maxDate, date)) return true;
+    
+    return false;
+  };
+
+  const isDaySelected = (day: number | null): boolean => {
     if (!day || !selectedDate) return false;
-    return selectedDate.getDate() === day &&
-           selectedDate.getMonth() === currentDate.getMonth() &&
-           selectedDate.getFullYear() === currentDate.getFullYear();
+    
+    const date = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    
+    return isSameDay(date, selectedDate);
   };
 
   return (
-    <div className={`relative w-full max-w-md ${className}`}>
-      <h2 className="text-xl font-semibold mb-4 text-gray-900">{label}</h2>
+    <div className={`relative ${className}`}>
+      {label && (
+        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
+          {label}
+          {required && <span className="text-red-500"> *</span>}
+        </label>
+      )}
       
-   
       <div 
-        className="relative cursor-pointer"
+        id={name}
         onClick={() => setIsOpen(!isOpen)}
+        className={`w-full px-4 py-2 border rounded-md cursor-pointer flex items-center justify-between ${
+          error 
+            ? 'border-red-500 focus:ring-red-200' 
+            : 'border-gray-300 focus:border-blue-500 focus:ring-blue-200'
+        } focus:ring-2 focus:outline-none`}
       >
-        <input
-          type="text"
-          value={selectedDate ? formatDate(selectedDate) : ''}
-          placeholder={placeholder}
-          readOnly
-          className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-05 focus:border-primary-05 cursor-pointer"
-        />
-        <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <span className={`${!value ? 'text-gray-400' : ''}`}>
+          {value ? formatDate(parseDate(value), 'MMM dd, yyyy') : placeholder}
+        </span>
+        <Calendar className={`h-5 w-5 ${error ? 'text-red-500' : 'text-gray-400'}`} />
       </div>
+      
+      {error && (
+        <p className="mt-1 text-sm text-red-500">{error}</p>
+      )}
 
-    
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-full bg-white border border-gray-200 rounded-lg shadow-lg z-50 p-4">
-    
+        <div className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg p-4">
           <div className="flex items-center justify-between mb-4">
             <button
-              onClick={() => navigateMonth(-1)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               type="button"
+              onClick={() => navigateMonth('prev')}
+              className="p-1 rounded-full hover:bg-gray-100"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
+              <ChevronLeft className="h-5 w-5 text-gray-600" />
             </button>
             
-            <h3 className="text-lg font-semibold text-gray-900">
-              {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+            <h3 className="font-medium text-gray-900">
+              {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
             </h3>
             
             <button
-              onClick={() => navigateMonth(1)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               type="button"
+              onClick={() => navigateMonth('next')}
+              className="p-1 rounded-full hover:bg-gray-100"
             >
-              <ChevronRight className="w-5 h-5 text-gray-600" />
+              <ChevronRight className="h-5 w-5 text-gray-600" />
             </button>
           </div>
-
-       
+          
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {weekdays.map((day: string) => (
-              <div key={day} className="text-center py-2 text-sm font-medium text-gray-600">
+            {days.map((day) => (
+              <div key={day} className="text-center text-xs font-medium text-gray-500">
                 {day}
               </div>
             ))}
           </div>
-
-     
+          
           <div className="grid grid-cols-7 gap-1">
-            {getDaysInMonth(currentDate).map((day: number | null, index: number) => (
+            {getDaysInMonth(currentMonth).map((day, index) => (
               <button
                 key={index}
-                onClick={() => selectDate(day)}
-                disabled={!day}
                 type="button"
-                className={`
-                  h-10 w-10 rounded-lg text-sm font-medium transition-colors
-                  ${!day ? 'invisible' : ''}
-                  ${isSelectedDate(day) 
-                    ? 'bg-primary-02 text-white' 
-                    : 'text-gray-700 hover:bg-gray-100'
-                  }
-                  ${day ? 'cursor-pointer' : ''}
-                `}
+                onClick={() => handleDateSelect(day)}
+                disabled={!day || isDayDisabled(day)}
+                className={`h-8 w-8 rounded-full text-sm flex items-center justify-center ${
+                  !day ? 'invisible' : ''
+                } ${
+                  isDaySelected(day)
+                    ? 'bg-blue-500 text-white'
+                    : isDayDisabled(day)
+                      ? 'text-gray-300 cursor-not-allowed'
+                      : 'text-gray-700 hover:bg-gray-100'
+                }`}
               >
                 {day}
               </button>
             ))}
-          </div>
-
-      
-          <div className="flex justify-end mt-4">
-            <button
-              onClick={() => setIsOpen(false)}
-              className="px-6 py-2 bg-primary-02 text-white rounded-lg hover:bg-primary-04 transition-colors font-medium"
-              type="button"
-            >
-              Done
-            </button>
           </div>
         </div>
       )}
@@ -172,27 +245,4 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 };
 
-
-const DatePickerExample: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-
-  const handleDateSelect = (date: Date): void => {
-    setSelectedDate(date);
-    console.log('Selected date:', date);
-  };
-
-  return (
-    <div className="p-8 bg-gray-50 min-h-screen">
-      <div className="max-w-md mx-auto">
-        <DatePicker
-          onDateSelect={handleDateSelect}
-          selectedDate={selectedDate}
-          placeholder="End Date"
-          label="Select End Date"
-        />
-      </div>
-    </div>
-  );
-};
-
-export default DatePickerExample;
+export default DatePicker;
